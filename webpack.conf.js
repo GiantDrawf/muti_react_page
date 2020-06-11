@@ -37,7 +37,8 @@ module.exports = {
     resolve: {
         extensions: ['.js', '.json', '.jsx'],
         alias: {
-            wxSDK: path.resolve(__dirname, 'client/wxUtils/wxSDK.js'),
+            '@': path.resolve(__dirname, 'client'),
+            ErrorBoundary: path.resolve(__dirname, 'client/components/errorBoundary'),
         },
     },
     module: {

@@ -9,10 +9,8 @@ const adaptive = require('postcss-adaptive');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HappyPack = require('happypack');
 const happyThreadPool = HappyPack.ThreadPool({
-    size: 1
+    size: 1,
 });
-const packageJson = require('./package.json');
-const appName = packageJson.name.split('.').join('');
 
 module.exports = {
     mode: 'production',
@@ -21,44 +19,39 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].[chunkhash:8].js',
-        publicPath: `https://p0.ifengimg.com/fe/zl/test/live/${appName}/`,
-        chunkFilename: `[name].[chunkhash:8].js`
+        publicPath: '/',
+        chunkFilename: `[name].[chunkhash:8].js`,
     },
     resolve: {
         extensions: ['.js', '.json', '.jsx'],
         alias: {
-            wxSDK: path.resolve(__dirname, 'client/wxUtils/wxSDK.js')
-        }
+            '@': path.resolve(__dirname, 'client'),
+            ErrorBoundary: path.resolve(__dirname, 'client/components/errorBoundary'),
+        },
     },
     optimization: {
         splitChunks: {
-            chunks: 'all'
-        }
+            chunks: 'all',
+        },
     },
     module: {
         rules: [
             {
                 test: /\.jsx?$/,
-                include: [
-                    path.resolve(__dirname, 'node_modules/@ifeng/'),
-                    path.resolve(__dirname, 'client/')
-                ],
-                use: 'happypack/loader?id=babel'
+                include: [path.resolve(__dirname, 'node_modules/@ifeng/'), path.resolve(__dirname, 'client/')],
+                use: 'happypack/loader?id=babel',
             },
             {
                 test: /\.s?css$/,
-                include: [
-                    path.resolve(__dirname, 'node_modules/@ifeng'),
-                    path.resolve(__dirname, 'client')
-                ],
+                include: [path.resolve(__dirname, 'node_modules/@ifeng'), path.resolve(__dirname, 'client')],
                 use: [
                     MiniCssExtractPlugin.loader,
                     {
                         loader: 'css-loader',
                         options: {
                             modules: true,
-                            localIdentName: '[local]-[hash:base64:8]'
-                        }
+                            localIdentName: '[local]-[hash:base64:8]',
+                        },
                     },
                     {
                         loader: 'postcss-loader',
@@ -67,21 +60,17 @@ module.exports = {
                             plugins: [
                                 postImport(),
                                 nextcss({
-                                    browsers: [
-                                        'last 2 versions',
-                                        'IOS >= 8',
-                                        'android>= 4'
-                                    ]
+                                    browsers: ['last 2 versions', 'IOS >= 8', 'android>= 4'],
                                 }),
                                 adaptive({
                                     remUnit: 75,
                                     autoRem: true,
-                                    useCssModules: true
-                                })
-                            ]
-                        }
-                    }
-                ]
+                                    useCssModules: true,
+                                }),
+                            ],
+                        },
+                    },
+                ],
             },
             {
                 test: /\.(eot|woff|woff2|ttf|svg|png|jpg|gif|jpeg)$/,
@@ -90,16 +79,16 @@ module.exports = {
                         loader: 'url-loader',
                         options: {
                             limit: 100,
-                            name: '[name].[hash:8].[ext]'
-                        }
-                    }
-                ]
+                            name: '[name].[hash:8].[ext]',
+                        },
+                    },
+                ],
             },
             {
                 test: /\.ejs$/,
-                use: 'handlebars-loader'
-            }
-        ]
+                use: 'handlebars-loader',
+            },
+        ],
     },
     plugins: [
         new CleanWebpackPlugin(),
@@ -120,15 +109,15 @@ module.exports = {
                                             'Safari >= 10.1',
                                             'iOS >= 10.3',
                                             'Firefox >= 54',
-                                            'Edge >= 15')
-                                        ]
+                                            'Edge >= 15'),
+                                        ],
                                     },
                                     modules: 'commonjs',
                                     useBuiltIns: 'entry',
-                                    debug: false
-                                }
+                                    debug: false,
+                                },
                             ],
-                            '@babel/preset-react'
+                            '@babel/preset-react',
                         ],
                         plugins: [
                             '@babel/plugin-transform-runtime',
@@ -139,27 +128,24 @@ module.exports = {
                             [
                                 '@babel/plugin-proposal-decorators',
                                 {
-                                    legacy: true
-                                }
+                                    legacy: true,
+                                },
                             ],
                             '@babel/plugin-proposal-function-sent',
                             '@babel/plugin-proposal-export-namespace-from',
                             '@babel/plugin-proposal-numeric-separator',
                             '@babel/plugin-proposal-throw-expressions',
-                            '@babel/plugin-transform-async-to-generator'
-                        ]
-                    }
-                }
+                            '@babel/plugin-transform-async-to-generator',
+                        ],
+                    },
+                },
             ],
             threadPool: happyThreadPool,
-            verbose: true
+            verbose: true,
         }),
         new UglifyJsPlugin({
             test: /\.jsx?$/,
-            include: [
-                path.resolve(__dirname, 'node_modules/@ifeng/'),
-                path.resolve(__dirname, 'client/')
-            ],
+            include: [path.resolve(__dirname, 'node_modules/@ifeng/'), path.resolve(__dirname, 'client/')],
             cache: true,
             uglifyOptions: {
                 ie8: false,
@@ -167,15 +153,15 @@ module.exports = {
                     // remove warnings
                     warnings: false,
                     // Drop console statements
-                    drop_console: true
-                }
+                    drop_console: true,
+                },
             },
-            sourceMap: true
+            sourceMap: true,
         }),
         new MiniCssExtractPlugin({
             filename: '[name].[hash].css',
-            chunkFilename: '[id].[hash].css'
+            chunkFilename: '[id].[hash].css',
         }),
-        ...getHtmls('./client/**/template.ejs', '', 'production')
-    ]
+        ...getHtmls('./client/**/template.ejs', '', 'production'),
+    ],
 };

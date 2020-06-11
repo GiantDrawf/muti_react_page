@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
-import errorBoundary from '@ifeng/errorBoundary';
+import errorBoundary from 'ErrorBoundary';
+import wxSDK from '@/wxUtils/wxSDK';
 import styles from './index.css';
-import wxSDK from 'wxSDK';
 
 /**
  * Layout
