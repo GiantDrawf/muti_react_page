@@ -10,7 +10,8 @@ const devPageConfig = require('./bin/devPageConfig.js');
 const getPackPageConfig = () => {
     const packPages = [];
     const packPagesNames = [];
-    devPageConfig.forEach(item => {
+
+    devPageConfig.forEach((item) => {
         if (item.pack) {
             packPages.push(item);
             packPagesNames.push(item.name);
@@ -27,7 +28,7 @@ const packPages = getPackPageConfig();
 module.exports = {
     mode: 'development',
     devtool: 'cheap-module-source-map',
-    entry: getEntrys(`./client/pages/**/app.jsx`, packPages),
+    entry: getEntrys('./client/pages/**/app.jsx', packPages),
     output: {
         path: path.resolve(__dirname, 'devtmp'),
         filename: 'js/[name].js',

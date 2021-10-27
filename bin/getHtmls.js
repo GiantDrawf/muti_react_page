@@ -3,14 +3,15 @@ const glob = require('glob');
 
 module.exports = function createHtml(globPath, startPages, env) {
     let files = glob.sync(globPath);
-    let list = [];
+    const list = [];
+
     if (startPages) {
         for (const item of files) {
             for (const page of startPages) {
                 if (item.indexOf(page.path) > -1) {
                     list.push({
                         path: item,
-                        name: page.name
+                        name: page.name,
                     });
                 }
             }
@@ -18,11 +19,12 @@ module.exports = function createHtml(globPath, startPages, env) {
         files = list;
     } else if (env === 'production') {
         const allPages = require('./devPageConfig.js');
+
         for (const item of files) {
             for (const page of allPages) {
                 list.push({
                     path: item,
-                    name: page.name
+                    name: page.name,
                 });
             }
         }
@@ -30,9 +32,10 @@ module.exports = function createHtml(globPath, startPages, env) {
     }
 
     return [
-        ...files.map(file => {
-            let path = file.path.replace('./client/pages/', '');
-            let paths = path.split('/');
+        ...files.map((file) => {
+            const path = file.path.replace('./client/pages/', '');
+            const paths = path.split('/');
+
             paths.pop();
             const entryName = paths.join('_');
 
@@ -42,8 +45,8 @@ module.exports = function createHtml(globPath, startPages, env) {
                 filename: `${entryName}.html`,
                 inject: false,
                 hash: false,
-                chunks: [entryName]
+                chunks: [entryName],
             });
-        })
+        }),
     ];
 };

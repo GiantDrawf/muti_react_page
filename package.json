@@ -4,7 +4,7 @@
     "description": "react多页面脚手架",
     "main": "index.js",
     "scripts": {
-        "start": "webpack-dev-server --host 0.0.0.0 --allowed-hosts .ifeng.com --hot --inline --watch --config ./webpack.conf.js",
+        "start": "webpack-dev-server --host 0.0.0.0 --hot --inline --watch --config ./webpack.conf.js",
         "build": "webpack --config ./webpack.prod.conf.js"
     },
     "author": "zhujian@ifeng.com",

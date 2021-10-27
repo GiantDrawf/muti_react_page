@@ -7,8 +7,10 @@ const glob = require('glob');
  */
 const getEntrys = (globPath, startPages) => {
     let files = glob.sync(globPath);
+
     if (startPages && startPages !== '**') {
-        let list = [];
+        const list = [];
+
         for (const item of files) {
             for (const page of startPages) {
                 if (item.indexOf(page.path) > -1) {
@@ -19,11 +21,14 @@ const getEntrys = (globPath, startPages) => {
         files = list;
     }
 
-    let result = {};
-    for (let file of files) {
-        let paths = file.replace('./client/pages/', '').split('/');
+    const result = {};
+
+    for (const file of files) {
+        const paths = file.replace('./client/pages/', '').split('/');
+
         paths.pop();
-        let entryName = paths.join('_');
+        const entryName = paths.join('_');
+
         result[entryName] = file;
     }
 
